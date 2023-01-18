@@ -1,71 +1,246 @@
-<html>
-  <head>
-    <title>Cadastro da liga dos astronautas</title>
-  </head>
-  <body>
-    <h3>Cadastro da liga dos astronautas</h3>
-    <form action>
-      <div>
-        <label for="name">Nome:</label>
-        <input type="text" id="name" name="name" />
-      </div>
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:t="http://myfaces.apache.org/tomahawk" xmlns:textBox="http://java.sun.com/jsf/composite/input/textBox" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:data="http://java.sun.com/jsf/composite/data"  xmlns:button="http://java.sun.com/jsf/composite/input/button" xmlns:calendar="http://java.sun.com/jsf/composite/input/calendar" xmlns:dropDownList="http://java.sun.com/jsf/composite/input/dropDownList">
+
+<ui:composition>
+    <!-- @@@ abas/administrativo/simulacaoDoAcordo.xhtml inicio -->
+    <c:set var="msg" value="#{msgCobrancaConsultaDeContaAbaSimulacaoDoAcordo}"/>
+    <c:set var="item" value="#{consultaDeContaBean.item.abaSimulacaoDoAcordo}" />
+    <c:set var="simula" value="#{consultaDeContaBean.statusAcordo}" />
+    <t:panelTab id="tab9" label="#{msg.title}" disabled="#{item.disabledAbaSimulacaoAdm2}" layout="block">
+        <t:div styleClass="module moduleTable moduleDosTablas" style="width: 556px" rendered="#{item.comboCodigoDeAcessoDisabled}">
+            <span>#{item.mensagemAviso}</span>
+        </t:div>
+        <h:panelGroup id="grupoDetalhe4" rendered="#{not item.comboCodigoDeAcessoDisabled}" layout="block">
+            <fieldset>
+                <br />
+                <ul>
+                    <!--#{item.itemCodigoDeAcesso} #{item.itemQuantidadeDeParcelas} -->
+                    <textBox:readOnly id="itemSaldoAtual" />
+                    <textBox:readOnly id="itemIof" />
+                    <textBox:readOnly id="mensagemAviso" containerCssStyle="tripleColumna" rendered="#{item.comboCodigoDeAcessoDisabled}" />
+
+                    <dropDownList:selectAjax id="itemCodigoDeAcesso"  items="#{item.comboCodigoDeAcesso}" ajaxRender="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens" ajaxListener="#{bean.eventAbaSimulacaoDoAcordoComboCodigoDeAcessoChange_Listener}" containerCssStyle="clr dobleColumna" disabled="#{item.comboCodigoDeAcessoDisabled}" required="false" />
+                    <h:panelGroup id="grupoDetalhe1">
+
+                        <h:panelGroup rendered="#{item.itemCarencia}">
+
+                        	<dropDownList:selectAjax id="itemPrazoCarencia"  items="#{item.comboCarenciaMesesValor}" ajaxRender="detail:cpForm:fieldset:tabAdminstrativo:tab9:itemDesconto detail:cpForm:fieldset:tabAdminstrativo:tab9:grupoDetalhe4 detail:cpForm:fieldset:tabAdminstrativo:tab9:grupoDetalhe detail:grupoMensagens" ajaxListener="#{bean.eventAbaSimulacaoDoAcordocomboCarenciaMesesValorChange_Listener}" containerCssStyle="clr" disabled="#{item.comboCarenciaMesesValorDisabled}" required="false"/>
+                        </h:panelGroup>
+                        <h:panelGroup id="detalheCarencia"  layout="block">
+                            <h:panelGroup rendered="#{item.grupoFlagCarenciaRendered}">
+                            <li>
+		                                        <span class="title" style="display: list-item;">
+								                    <h:outputText value="#{msg.itemDataDoPagamentoDaCarencia}" /><span style="color: #FF0100;visibility: 'visible'">*</span>
+								                </span>
+                                <span class="spanInputCalendar">
+			                                        <h:inputText immediate="true" id="dataPagamentoCarencia" styleClass="datepickerCarencia" disabled="false" value="#{item.itemDataDoPagamentoDaCarencia}" style="background-color: rgb(235, 235, 228);border: 1px solid #9db5cd;color: rgb(84, 84, 84);">
+	                                                <f:ajax event="change" execute="detail:cpForm:fieldset:tabAdminstrativo:tab9:dataDaEfetivacao detail:cpForm:fieldset:tabAdminstrativo:tab9:itemQuantidadeDeParcelas:field detail:cpForm:fieldset:tabAdminstrativo:tab9:dataPagamentoCarencia detail:cpForm:fieldset:tabAdminstrativo:tab9:itemPrazoCarencia:field detail:cpForm:fieldset:tabAdminstrativo:tab9:itemDesconto detail:cpForm:fieldset:tabAdminstrativo:tab9:itemPercentagemDesconto detail:grupoMensagens" listener="#{bean.eventAbaSimulacaoDoAcordoDataPgtoChange}" render="detail:cpForm:fieldset:tabAdminstrativo:tab9:dataDaEfetivacao detail:cpForm:fieldset:tabAdminstrativo:tab9:itemQuantidadeDeParcelas:field detail:cpForm:fieldset:tabAdminstrativo:tab9:dataPagamentoCarencia detail:cpForm:fieldset:tabAdminstrativo:tab9:itemPrazoCarencia:field detail:cpForm:fieldset:tabAdminstrativo:tab9:itemDesconto detail:cpForm:fieldset:tabAdminstrativo:tab9:itemPercentagemDesconto detail:grupoMensagens"/>
+		                                        </h:inputText>
+			                                        <input type="hidden" id="hiddenDataPagamentoCarencia" value="#{item.itemArrayDatasCarencia}"/>
+		                                         <script  type="text/javascript">
+			                                         	datepicker('datepickerCarencia','hiddenDataPagamentoCarencia');
+												  </script>
+												 </span>
+                            </li>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        <h:panelGroup id="comboParcelas">
+                        <dropDownList:selectAjax id="itemQuantidadeDeParcelas" items="#{item.comboQuantidadeDeParcelas}" ajaxRender="detail:cpForm:fieldset:tabAdminstrativo:tab9:grupoDetalhe4 detail:cpForm:fieldset:tabAdminstrativo:tab9:grupoDetalhe detail:grupoMensagens" ajaxListener="#{bean.eventAbaSimulacaoDoAcordoComboQuantidadeDeParcelasChange_Listener}" containerCssStyle="clr dobleColumna" disabled="#{item.comboQuantidadeDeParcelasDisabled}" required="false" flagDesconto="#{item.desconto ? 'S' : 'N'}" flagCarencia="#{item.carencia ? 'S' : 'N'}"/>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{not (item.botaoSimularDisabled or item.comboQuantidadeDeParcelasDisabled)}" layout="block">
+                            <li id="dataEf">
+	                                        <span class="title" style="display: list-item;">
+							                    <h:outputText value="#{msg.itemDataDaEfetivacao}" /><span style="color: #FF0100;visibility: 'visible'">*</span>
+							                </span>
+                                <span class="spanInputCalendar">
+	                                        <h:inputText  immediate="false" id="dataDaEfetivacao" styleClass="datepickerEfetivacao" disabled="#{item.itemDataDaEfetivacaoDisabled}" value="#{item.itemDataDaEfetivacao}" style="background-color: rgb(235, 235, 228);border: 1px solid #9db5cd;color: rgb(84, 84, 84);">
+	                                        	<f:ajax event="change" execute="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens" listener="#{bean.eventAbaSimulacaoDoAcordoDataPgtoChange}" render="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens"/>
+	                                        </h:inputText>
+	                                        <input type="hidden" id="hiddenDataDaEfetivacao" value="#{item.itemArrayDatasEfetivacao}"/>
+	                                         <script  type="text/javascript">
+	                                         	datepicker('datepickerEfetivacao','hiddenDataDaEfetivacao');
+											  </script>
+											 </span>
+                            </li>
+                            <h:panelGroup rendered="#{item.grupoFlagEntradaRendered}">
+                                <li class="clr">
+	                                        <span class="title" style="display: list-item;">
+							                    <h:outputText value="#{msg.itemValorDaEntrada}" /><span style="color: #FF0100;visibility: 'visible'">*</span>
+							                </span>
+
+                                    <h:inputText id="itemValorDaEntrada" value="#{item.itemValorDaEntrada}" containerCssStyle="clr" style="text-align: right;">
+                                        <f:ajax event="change" execute="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens" listener="#{bean.eventAbaSimulacaoDoAcordoDataPgtoChange}" render="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens"/>
+                                    </h:inputText>
+                                </li>
+                                <li>
+	                                        <span class="title" style="display: list-item;">
+							                    <h:outputText value="#{msg.itemDataDoPagamentoDaEntrada}" /><span style="color: #FF0100;visibility: 'visible'">*</span>
+							                </span>
+                                    <span class="spanInputCalendar">
+	                                        <h:inputText immediate="false" id="dataPagamentoEntrada" styleClass="datepickerEntrada" disabled="false" value="#{item.itemDataDoPagamentoDaEntrada}" style="background-color: rgb(235, 235, 228);border: 1px solid #9db5cd;color: rgb(84, 84, 84);" >
+	                                   			<f:ajax event="change" execute="#{item.grupoFlagCarenciaRendered ? 'detail:cpForm:fieldset:tabAdminstrativo:tab9:detalheCarencia detail:cpForm:fieldset:tabAdminstrativo:tab9:dataDaEfetivacao detail:cpForm:fieldset:tabAdminstrativo:tab9:itemQuantidadeDeParcelas:field detail:cpForm:fieldset:tabAdminstrativo:tab9:dataPagamentoCarencia detail:cpForm:fieldset:tabAdminstrativo:tab9:itemPrazoCarencia:field detail:cpForm:fieldset:tabAdminstrativo:tab9:itemDesconto detail:cpForm:fieldset:tabAdminstrativo:tab9:itemPercentagemDesconto detail:grupoMensagens' : 'detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens' } " listener="#{bean.eventAbaSimulacaoDoAcordoDataPgtoChange}" render="#{item.grupoFlagCarenciaRendered ? 'detail:cpForm:fieldset:tabAdminstrativo:tab9:detalheCarencia detail:cpForm:fieldset:tabAdminstrativo:tab9:dataDaEfetivacao detail:cpForm:fieldset:tabAdminstrativo:tab9:itemQuantidadeDeParcelas:field detail:cpForm:fieldset:tabAdminstrativo:tab9:dataPagamentoCarencia detail:cpForm:fieldset:tabAdminstrativo:tab9:itemPrazoCarencia:field detail:cpForm:fieldset:tabAdminstrativo:tab9:itemDesconto detail:cpForm:fieldset:tabAdminstrativo:tab9:itemPercentagemDesconto detail:grupoMensagens' : 'detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens' }"/>
+	                                        </h:inputText>
+	                                        <input type="hidden" id="hiddenDataPagamentoEntrada" value="#{item.itemArrayDatas}"/>
+	                                         <script  type="text/javascript">
+	                                         	datepicker('datepickerEntrada','hiddenDataPagamentoEntrada');
+											 </script>
+									</span>
+                                </li>
+                            </h:panelGroup>
+                            <button:buttonAjax id="botaoAlterarParcelas" ajaxRender="" ajaxListener="#{bean.eventAbaSimulacaoDoAcordoDataPgtoChange}" ajaxExecute="@this" css="display:none;" />
+                            <h:panelGroup rendered="#{item.grupoParcelaRendered}">
+                                <li class="clr">
+	                                        <span class="title" style="display: list-item;">
+							                    <h:outputText value="#{msg.itemDesconto}" /><span style="color: #FF0100;visibility: 'visible'">*</span>
+							                </span>
+                                    <h:inputText value="#{item.itemDesconto}" id="itemDesconto"   style="width:94%; text-align: right;" >
+                                        <f:ajax event="change" execute="detail:cpForm:fieldset:tabAdminstrativo:tab9:itemDesconto detail:cpForm:fieldset:tabAdminstrativo:tab9:itemPercentagemDesconto detail:cpForm:fieldset:tabAdminstrativo:tab9:grupoDetalhe detail:grupoMensagens" listener="#{bean.calcularPercentualDesconto}" render="detail:cpForm:fieldset:tabAdminstrativo:tab9:itemDesconto detail:cpForm:fieldset:tabAdminstrativo:tab9:itemPercentagemDesconto detail:cpForm:fieldset:tabAdminstrativo:tab9:grupoDetalhe detail:grupoMensagens"/>
+                                    </h:inputText>
+                                </li>
+                                <li>
+	                                        <span class="title" style="display: list-item;">
+							                    <h:outputText value="#{msg.itemPercentagemDesconto}" /><span style="color: #FF0100;visibility: 'visible'">*</span>
+							                </span>
+                                    <h:inputText value="#{item.itemPercentagemDesconto}" id="itemPercentagemDesconto" onblur="limparCampos(this,event);" style="text-align: right;">
+                                        <f:ajax event="change" execute="detail:cpForm:fieldset:tabAdminstrativo:tab9:itemDesconto detail:cpForm:fieldset:tabAdminstrativo:tab9:grupoDetalhe detail:grupoMensagens" listener="#{bean.calcularPercentualDesconto}" render="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens"/>
+                                    </h:inputText>
+                                </li>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+
+								<button:buttonAjax id="botaoAlterarDataCarencia" ajaxRender="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens" ajaxListener="#{bean.eventAbaSimulacaoDoAcordoDataPagamentoCarenciaListener}" ajaxExecute="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens" css="display:none;" />                                   
+                                </h:panelGroup>
+                                                                
+                              
+                            </ul>
+                    </fieldset>
+                    <h:panelGroup id="grupoDetalheBotonera">
+                    <div class="botonera">
+						<button:buttonAjax id="botaoSimular"  rendered="#{item.habilitaBotaoPendente == false}" ajaxRender="detail:cpForm:fieldset:tabAdminstrativo:tab9:grupoDetalhe detail:grupoMensagens" ajaxListener="#{bean.eventAbaSimulacaoDoAcordoBotaoSimularClick_Listener}" disabled="#{item.botaoSimularDisabled or item.comboQuantidadeDeParcelasDisabled}" ajaxExecute="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens" />
+                    	<button:buttonAjax id="botaoPendente" rendered="#{item.habilitaBotaoPendente == true}" ajaxRender="detail:cpForm:fieldset:tabAdminstrativo:tab9:grupoDetalhe detail:grupoMensagens" ajaxListener="#{bean.eventAbaSimulacaoDoAcordoBotaoSimularClick_Listener}" disabled="#{item.botaoSimularDisabled or item.comboQuantidadeDeParcelasDisabled}" ajaxExecute="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens" onclickDisabled="false" onclick="return confirm('#{msgGeneral.confimaAcordoPendente}');"/>
+                    </div>
+                </h:panelGroup>
+                </h:panelGroup>
+                < id="grupoDetalhe">
+                    <h:panelGroup rendered="#{item.grupoDetalheRendered and not (item.botaoSimularDisabled or item.comboQuantidadeDeParcelasDisabled)}">
+                        <data:gridView bean="#{bean}" data="#{item.listaDetalhe}" id="gridViewDetalhe" showPagination="false" showRecordCount="false" recordCount="#{item.listaDetalheCount}">
+                            <t:column title="#{data.listaParcela}" styleClass="centerText" headerstyleClass="centerText" width="70">
+                                <f:facet name="header">#{msg.listaDetalheParcela}</f:facet> #{data.listaParcela}
+                            </t:column>
+                            <t:column title="#{data.listaData}" styleClass="centerText" headerstyleClass="centerText" width="50">
+                                <f:facet name="header">#{msg.listaDetalheData}</f:facet> #{data.listaData}
+                            </t:column>
+                            <t:column title="#{data.listaValorDaParcela}" styleClass="rightText" headerstyleClass="rightText">
+                                <f:facet name="header">#{msg.listaDetalheValorDaParcela}</f:facet> #{data.listaValorDaParcela}
+                            </t:column>
+                        </data:gridView>
+                        <br />
+                        <fieldset>
+                            <ul>                                
+                                <textBox:readOnly id="itemDetalheValorDoAcordo" containerCssStyle="clr" />
+                                <textBox:readOnly id="itemDetalheValorDoAcordoComDesconto"/>
+                                <textBox:readOnly id="itemDetalheTipoSaldo"/>
+                                
+                                <textBox:readOnly id="itemDetalheIofDoAcordo" containerCssStyle="clr" />
+                                <textBox:readOnly id="itemDetalheJuros" />
+                                <textBox:readOnly id="itemDetalheTaxaDeJuros" />
+                            
+                                <textBox:readOnly id="itemDetalhePerdaCapital" containerCssStyle="clr" />
 
 
-      <div>
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" /> -
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" />
-      </div>
+                </ul>
+            </fieldset>
+            <h:panelGroup id="grupoDetalheBotonera">
+                <div class="botonera">
+                    <button:buttonAjax id="botaoSimular"  rendered="#{simula == false}" ajaxRender="detail:cpForm:fieldset:tabAdminstrativo:tab9:grupoDetalhe detail:grupoMensagens" ajaxListener="#{bean.eventAbaSimulacaoDoAcordoBotaoSimularClick_Listener}" disabled="#{item.botaoSimularDisabled or item.comboQuantidadeDeParcelasDisabled}" ajaxExecute="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens" />
+                    <button:buttonAjax id="botaoPendente" rendered="#{simula == true}" ajaxRender="detail:cpForm:fieldset:tabAdminstrativo:tab9:grupoDetalhe detail:grupoMensagens" ajaxListener="#{bean.eventAbaSimulacaoDoAcordoBotaoSimularClick_Listener}" disabled="#{item.botaoSimularDisabled or item.comboQuantidadeDeParcelasDisabled}" ajaxExecute="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens" onclickDisabled="false" onclick="return confirm('#{msgGeneral.confimaAcordoPendente}');"/>
+                </div>
+            </h:panelGroup>
+        </h:panelGroup>
+        <h:panelGroup id="grupoDetalhe">
+            <h:panelGroup rendered="#{item.grupoDetalheRendered and not (item.botaoSimularDisabled or item.comboQuantidadeDeParcelasDisabled)}">
+                <data:gridView bean="#{bean}" data="#{item.listaDetalhe}" id="gridViewDetalhe" showPagination="false" showRecordCount="false" recordCount="#{item.listaDetalheCount}">
+                    <t:column title="#{data.listaParcela}" styleClass="centerText" headerstyleClass="centerText" width="70">
+                        <f:facet name="header">#{msg.listaDetalheParcela}</f:facet> #{data.listaParcela}
+                    </t:column>
+                    <t:column title="#{data.listaData}" styleClass="centerText" headerstyleClass="centerText" width="50">
+                        <f:facet name="header">#{msg.listaDetalheData}</f:facet> #{data.listaData}
+                    </t:column>
+                    <t:column title="#{data.listaValorDaParcela}" styleClass="rightText" headerstyleClass="rightText">
+                        <f:facet name="header">#{msg.listaDetalheValorDaParcela}</f:facet> #{data.listaValorDaParcela}
+                    </t:column>
+                </data:gridView>
+                <h:outputText style="font-size:11px; text-align: justify;" escape="false" value="* Indica que a parcela é de Carência."/>
+                <br />
+                <h:outputText style="font-size:11px; text-align: justify;" escape="false" value="Após a contratação deste acordo de renegociação, se houver atraso no pagamento da parcela, ocorrerá a cobrança"/>
+                <br />
+                <h:outputText style="font-size:11px; text-align: justify;" escape="false" value="de multa, mora, juros e IOF por atraso, se for o caso, na próxima parcela do acordo de renegociação."/>
+                
+                <br />
+                <fieldset>
+                    <ul>
+                        <textBox:readOnly id="itemDetalheValorDoAcordo" containerCssStyle="clr" />
+                        <textBox:readOnly id="itemDetalheValorDoAcordoComDesconto"/>
+                        <textBox:readOnly id="itemDetalheTipoSaldo"/>
 
+                        <textBox:readOnly id="itemDetalheIofDoAcordo" containerCssStyle="clr" />
+                        <textBox:readOnly id="itemDetalheJuros" />
+                        <textBox:readOnly id="itemDetalheTaxaDeJuros" />
 
-      <div>
-        <label for="birthday">Data de nascimento:</label>
-        <input type="date" name="birthday" id="birthday" /> -
+                        <h:panelGroup id="grupoProjetado1" rendered="#{item.grupoProjetadoRendered}">
+                            <textBox:readOnly id="itemDetalheCorrecaoMonetariaProjetado" containerCssStyle="clr" />
+                            <textBox:readOnly id="itemDetalheMoraProjetada" />
+                        </h:panelGroup>
+                        <h:panelGroup id="grupoProjetado2" rendered="#{not item.grupoProjetadoRendered}">
+                            <textBox:readOnly id="itemDetalheEncargoProjetado" containerCssStyle="clr" />
+                        </h:panelGroup>
+                        <textBox:readOnly id="itemDetalheStatus"/>
 
-        <label for="photo">Foto:</label>
-        <input type="file" name="photo" id="photo" />
-      </div>
+                        <textBox:readOnly id="itemDetalheCetMensal" containerCssStyle="clr"/>
+                        <textBox:readOnly id="itemDetalheCetAnual" />
+                        <textBox:readOnly id="itemDetalheTaxaJurosAnual" />
 
+                        <dropDownList:selectOneMenu
+                                id="itemDetalheFormaEnvioPma" items="#{comboBean.formaEnvioPma}"
+                                containerCssStyle="clr"
+                                disabled="#{empty consultaDeContaBean.item.abaSimulacaoDoAcordo.itemDetalheEmailCadastrado}">
+                        </dropDownList:selectOneMenu>
+                        <textBox:readOnly id="itemDetalheEmailCadastrado" />
 
-      <div>
-        <label for="nationality">Nacionalidade:</label>
-        <select name="nationality" id="nationality">
-          <option value="russian">Russa</option>
-          <option value="american">Americana</option>
-          <option value="brasilian">Brasileira</option>
-        </select> -
+                        <li>
+                            <span class="title" style="display: list-item;">
+							    <h:outputText value="#{msg.itemLupaInformacaoBacen}" /><span style="color: #FF0100;visibility: 'visible'"></span>
+                                <h:commandButton id="btnInformacaoBacen" immediate="true"
+                                                 image="/static/themeOffice/images/img_lupa.gif"
+                                                 action="#{consultaDeContaBean.apresentarPopupInformacaoBacenSimulacao}"
+                                                 rendered="true" title=""
+                                                 style="font-weight: normal; text-decoration: none; color:#4d6380; height:13px; width:13px; border: 0px; vertical-align: bottom;">
+                                    <f:ajax render="detail:cpForm:fieldset:tabAdminstrativo:poupInformacaoBacenSimulacao" />
+                                </h:commandButton>
+                            </span>
+                        </li>
 
-        Genero:
-        <label for="female">F</label>
-        <input type="radio" name="gender" id="female" value="female" />
-        <label for="male">M</label>
-        <input type="radio" name="gender" id="male" value="male" />
-      </div>
+                        <!--<textBox:readOnly id="itemDetalheEncargosPerdoados" /> -->
+                        <!--<textBox:readOnly id="itemDetalheIofDeAtraso" containerCssStyle="clr" />-->
+                    </ul>
+                </fieldset>
+                <div class="botonera">
+                    <button:buttonAjax id="botaoDetalheSalvar" ajaxRender="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:cpForm:fieldset:tabbedPane detail:cpForm:fieldset:grupoConsultaDaConta detail:grupoMensagens" ajaxListener="#{bean.eventAbaSimulacaoDoAcordoBotaoSalvarAdministrativoIIClick_Listener}" ajaxExecute="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens" onclickDisabled="false"/>
+                    <button:buttonAjax id="botaoDetalheCancelar" ajaxRender="detail:cpForm:fieldset:tabAdminstrativo:tab9 detail:grupoMensagens" ajaxListener="#{bean.eventAbaSimulacaoDoAcordoBotaoCancelarClick_Listener}" ajaxExecute="@this" />
+                </div>
+            </h:panelGroup>
+        </h:panelGroup>
+      
+    </t:panelTab>
 
+    <h:panelGroup id="poupInformacaoBacenSimulacao" layout="block">
+        <ui:include src="popupSimulacaoAcordo/popupInformacaoBacen.xhtml">
+            <ui:param name="bean" value="#{consultaDeContaBean}"/>
+            <ui:param name="deshabilitarValidacion" value="true"/>
+        </ui:include>
+    </h:panelGroup>
 
-      <div>
-        Suas principais qualidades:
-
-        <label for="int">Inteligência</label>
-        <input type="checkbox" name="int" id="int" /> |
-        <label for="res">Resiliência</label>
-        <input type="checkbox" name="res" id="res" /> |
-        <label for="physic">Preparo físico</label>
-        <input type="checkbox" name="physic" id="physic" /> |
-        <label for="edu">Educação</label>
-        <input type="checkbox" name="edu" id="edu" />
-      </div>
-
-
-      <div>
-        <textarea name="description" id="description"></textarea>
-      </div>
-
-
-      <div>
-        <input type="submit" value="Criar" />
-      </div>
-    </form>
-  </body>
+    <!-- @@@ abas/administrativo/simulacaoDoAcordo.xhtml fim -->
+</ui:composition>
 </html>
